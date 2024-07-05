@@ -2,7 +2,8 @@ package giulio_marra.s7_l5_be_esame.services;
 
 import giulio_marra.s7_l5_be_esame.entities.Evento;
 import giulio_marra.s7_l5_be_esame.entities.Utente;
-import giulio_marra.s7_l5_be_esame.excepitions.BadRequest;
+import giulio_marra.s7_l5_be_esame.excepitions.BadRequestException;
+import giulio_marra.s7_l5_be_esame.excepitions.NotFoundException;
 import giulio_marra.s7_l5_be_esame.payloads.EventoRequiredDto;
 import giulio_marra.s7_l5_be_esame.repositories.EventoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class EventoServices {
 
     public Evento saveEvento(EventoRequiredDto body, Utente organizzatore) {
         if (eventoRepo.existsByDescrizione(body.descrizione())) {
-            throw new BadRequest("Evento gia esistente");
+            throw new BadRequestException("Evento gia esistente");
         }
         Evento evento = new Evento();
         evento.setTitolo(body.titolo());
@@ -39,7 +40,7 @@ public class EventoServices {
         if (optionaleVENTO.isPresent()) {
             return optionaleVENTO.get();
         } else {
-            throw new BadRequest("Evento con questo id non trovato");
+            throw new NotFoundException("Evento con questo id non trovato");
         }
     }
 

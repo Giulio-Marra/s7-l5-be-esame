@@ -25,7 +25,7 @@ public class AuthServices {
         if (bcrypt.matches(uld.password(), utente.getPassword())) {
             return jwtTools.createToken(utente);
         } else {
-            throw new UnauthorizedException("Credenziali non corrette!");
+            throw new UnauthorizedException("Credenziali errate");
         }
     }
 }

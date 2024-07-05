@@ -29,7 +29,7 @@ public class JwtTools {
             Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
 
         } catch (Exception ex) {
-            throw new UnauthorizedException("Problemi col token! Per favore effettua di nuovo il login!");
+            throw new UnauthorizedException("Problemi del token,rilogga per un nuovo token");
 
         }
     }

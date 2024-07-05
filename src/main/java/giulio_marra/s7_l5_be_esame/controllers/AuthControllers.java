@@ -1,6 +1,6 @@
 package giulio_marra.s7_l5_be_esame.controllers;
 
-import giulio_marra.s7_l5_be_esame.excepitions.BadRequest;
+import giulio_marra.s7_l5_be_esame.excepitions.BadRequestException;
 import giulio_marra.s7_l5_be_esame.payloads.NewUtenteResponseDto;
 import giulio_marra.s7_l5_be_esame.payloads.UtenteLoginDto;
 import giulio_marra.s7_l5_be_esame.payloads.UtenteLoginRespnseTokenDto;
@@ -26,7 +26,7 @@ public class AuthControllers {
     @ResponseStatus(HttpStatus.CREATED)
     public NewUtenteResponseDto saveUser(@RequestBody @Validated UtenteRequiredDto body, BindingResult valResult) {
         if (valResult.hasErrors()) {
-            throw new BadRequest(valResult.getAllErrors().toString());
+            throw new BadRequestException(valResult.getAllErrors());
         }
         return new NewUtenteResponseDto(utenteServices.saveUser(body).getId());
     }

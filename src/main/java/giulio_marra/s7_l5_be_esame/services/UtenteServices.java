@@ -2,7 +2,8 @@ package giulio_marra.s7_l5_be_esame.services;
 
 import giulio_marra.s7_l5_be_esame.entities.Utente;
 import giulio_marra.s7_l5_be_esame.enums.Ruoli;
-import giulio_marra.s7_l5_be_esame.excepitions.BadRequest;
+import giulio_marra.s7_l5_be_esame.excepitions.BadRequestException;
+import giulio_marra.s7_l5_be_esame.excepitions.NotFoundException;
 import giulio_marra.s7_l5_be_esame.payloads.UtenteRequiredDto;
 import giulio_marra.s7_l5_be_esame.repositories.UtenteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UtenteServices {
 
     public Utente saveUser(UtenteRequiredDto body) {
         if (utenteRepo.existsByEmail(body.email())) {
-            throw new BadRequest("Utente gia esistente");
+            throw new BadRequestException("Utente gia esistente");
         }
 
         Utente utente = new Utente();
@@ -41,11 +42,11 @@ public class UtenteServices {
         if (optionalUtent.isPresent()) {
             return optionalUtent.get();
         } else {
-            throw new BadRequest("Utente con questo id non trovato");
+            throw new NotFoundException("Utente con questo id non trovato");
         }
     }
 
     public Utente findByEmail(String email) {
-        return utenteRepo.findByEmail(email).orElseThrow(() -> new BadRequest("utente non trovato"));
+        return utenteRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("utente con questa email non trovato"));
     }
 }
