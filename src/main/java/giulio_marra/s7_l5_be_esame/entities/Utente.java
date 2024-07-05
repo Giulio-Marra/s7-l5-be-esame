@@ -1,5 +1,6 @@
 package giulio_marra.s7_l5_be_esame.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import giulio_marra.s7_l5_be_esame.enums.Ruoli;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
+@JsonIgnoreProperties({"password", "ruoli", "authorities", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
 public class Utente implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
