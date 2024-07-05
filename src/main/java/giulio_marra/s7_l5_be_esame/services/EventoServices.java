@@ -1,6 +1,7 @@
 package giulio_marra.s7_l5_be_esame.services;
 
 import giulio_marra.s7_l5_be_esame.entities.Evento;
+import giulio_marra.s7_l5_be_esame.entities.Utente;
 import giulio_marra.s7_l5_be_esame.excepitions.BadRequest;
 import giulio_marra.s7_l5_be_esame.payloads.EventoRequiredDto;
 import giulio_marra.s7_l5_be_esame.repositories.EventoRepo;
@@ -14,7 +15,10 @@ public class EventoServices {
     @Autowired
     EventoRepo eventoRepo;
 
-    public Evento saveEvento(EventoRequiredDto body) {
+    @Autowired
+    UtenteServices utenteServices;
+
+    public Evento saveEvento(EventoRequiredDto body, Utente organizzatore) {
         if (eventoRepo.existsByDescrizione(body.descrizione())) {
             throw new BadRequest("Evento gia esistente");
         }
@@ -24,6 +28,7 @@ public class EventoServices {
         evento.setLuogo(body.luogo());
         evento.setData_evento(body.data_evento());
         evento.setNumero_posti(body.numero_posti());
+        evento.setOrganizzatore(organizzatore);
 
         return eventoRepo.save(evento);
     }
@@ -38,7 +43,7 @@ public class EventoServices {
         }
     }
 
-    public Evento updateEvento(Long id, EventoRequiredDto body) {
+    public Evento updateEvento(Long id, EventoRequiredDto body, Utente organizzatore) {
         Evento evento = getEvento(id);
 
         evento.setTitolo(body.titolo());
@@ -46,6 +51,7 @@ public class EventoServices {
         evento.setLuogo(body.luogo());
         evento.setData_evento(body.data_evento());
         evento.setNumero_posti(body.numero_posti());
+        evento.setOrganizzatore(organizzatore);
 
         return eventoRepo.save(evento);
     }
