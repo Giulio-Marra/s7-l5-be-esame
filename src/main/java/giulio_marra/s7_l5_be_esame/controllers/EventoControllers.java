@@ -4,7 +4,9 @@ import giulio_marra.s7_l5_be_esame.entities.Evento;
 import giulio_marra.s7_l5_be_esame.entities.Utente;
 import giulio_marra.s7_l5_be_esame.payloads.EventoRequiredDto;
 import giulio_marra.s7_l5_be_esame.payloads.NewEventoResponseDto;
+import giulio_marra.s7_l5_be_esame.payloads.NewPrenotazioneResponseDto;
 import giulio_marra.s7_l5_be_esame.services.EventoServices;
+import giulio_marra.s7_l5_be_esame.services.PrenotazioneServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 public class EventoControllers {
     @Autowired
     EventoServices eventoServices;
+
+    @Autowired
+    PrenotazioneServices prenotazioneServices;
 
     @PostMapping("/me")
     @PreAuthorize("hasAuthority('ORGANIZZATORE')")
@@ -32,5 +37,10 @@ public class EventoControllers {
     @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     void deleteEvento(@PathVariable Long id) {
         eventoServices.deleteEvento(id);
+    }
+
+    @PostMapping("/me/participation/{id_evento}")
+    NewPrenotazioneResponseDto joinParticipation(@PathVariable("id_evento") Evento evento, @AuthenticationPrincipal Utente utente) {
+        return new NewPrenotazioneResponseDto(prenotazioneServices.savePrenotazione(evento, utente).getId());
     }
 }
