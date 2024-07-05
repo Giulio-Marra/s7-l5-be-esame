@@ -9,6 +9,7 @@ import giulio_marra.s7_l5_be_esame.repositories.PrenotazioneRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,14 @@ public class PrenotazioneServices {
         if (prenotazioneRepo.existsByEventoAndUtente(evento, utente)) {
             throw new BadRequestException("Sei gia prenotato per questo evento");
         }
+
+        List<Prenotazione> prenotazioniEvento = getPrenotazioniByEvento(evento);
+        int numeroPrenotazioniAttuali = prenotazioniEvento.size();
+
+        if (numeroPrenotazioniAttuali >= evento.getNumero_posti()) {
+            throw new BadRequestException("Prenotazioni al completo per questo evento");
+        }
+
         Prenotazione prenotazione = new Prenotazione(evento, utente);
 
         return prenotazioneRepo.save(prenotazione);
@@ -38,6 +47,10 @@ public class PrenotazioneServices {
     public void deletePrenotazione(Long id) {
         Prenotazione prenotazione = getPrenotazione(id);
         prenotazioneRepo.delete(prenotazione);
+    }
+
+    public List<Prenotazione> getPrenotazioniByEvento(Evento evento) {
+        return prenotazioneRepo.findByEvento(evento);
     }
 
 }
