@@ -23,6 +23,7 @@ public class EventoServices {
         if (eventoRepo.existsByDescrizione(body.descrizione())) {
             throw new BadRequestException("Evento gia esistente");
         }
+
         Evento evento = new Evento();
         evento.setTitolo(body.titolo());
         evento.setDescrizione(body.descrizione());
